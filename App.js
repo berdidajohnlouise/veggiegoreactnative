@@ -109,14 +109,19 @@ const App = () => {
     signIn: async(email,password) => {
       let userToken;
       userToken = null;
-      // if(email == 'user@gmail.com' && password =='password'){
         await fetch('https://veggiego.com/api/v1/login',{
-          method: 'get',
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({email: email, password: password})
         })
         .then((response) => response.json())
         .then(async (json) => {
-          await AsyncStorage.setItem('userToken',json.token)
-          setUserToken(json.token);
+          userToken = json.token
+          await AsyncStorage.setItem('userToken',userToken)
+          setUserToken(userToken);
         })
         .catch((error)=>{
           Alert.alert('Invalid User!', 'Username or password is incorrect');
